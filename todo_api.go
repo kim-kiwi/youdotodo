@@ -37,15 +37,18 @@ func NewTodoApi(tc *TodoCollection, sm *SessionManager, uc *UserCollection) *gho
 		if !ok {
 			return errors.New("user id missing")
 		}
-		if todo, err := tc.Get(id); err != nil {
+		old, err := tc.Get(id)
+		if err != nil {
 			return err
-		} else if todo.UserId != user.Id {
+		}
+		if old.UserId != user.Id {
 			return errors.New("permission denied")
 		}
 		todo := new.ToD()
 		if err := todo.Validate(); err != nil {
 			return err
 		}
+		todo.UserId = old.UserId
 		return tc.Update(id, todo)
 	})
 	todoApi.PatchFrom(func(id int64, todo Todo, r *http.Request) (Todo, error) {
@@ -62,7 +65,10 @@ func NewTodoApi(tc *TodoCollection, sm *SessionManager, uc *UserCollection) *gho
 			Idx     *int64  `json:"idx"`
 			Done    *bool   `json:"done"`
 		}
-		json.NewDecoder(r.Body).Decode(&patch)
+		err := json.NewDecoder(r.Body).Decode(&patch)
+		if err != nil {
+			return Todo{}, errors.New("Invalid JSON")
+		}
 
 		if patch.Content != nil {
 			todo.Content = *patch.Content

@@ -38,7 +38,7 @@ fmt.Fprint(w, "\n  ")
 fmt.Fprint(w, "\n  <a href=\"/logout\">logout</a>\n</p>\n")
 fmt.Fprint(w, "\n\n")
  if logged_in { 
-fmt.Fprint(w, "\n\n<!-- <img src=\"static/웃는아기.png\"> -->\n<!-- 어서오세요 -->\n\n<style>\n  .cal {\n      gap: 0.1rem;\n      display: grid;\n      grid-template-columns: repeat(7, 1fr);\n      width: 250px;\n      background: var(--code-bg);\n  }\n  .cal-item:hover,\n  .cal-item.selected {\n      background: var(--fg);\n      color: var(--bg);\n  }\n  .done span {\n      text-decoration: line-through;\n      color: var(--small-fg);\n  }\n</style>\n\n<div>\n  <input id=\"year-month\" type=\"month\">\n  <div id=\"cal\" class=\"cal\"></div>\n</div>\n\n<hr>\n\n<form id=\"form\">\n  <input id=\"todo-input\">\n  <button type=\"submit\">추가</button>\n</form>\n<span id=\"msg\"></span>\n\n<br>\n\n")
+fmt.Fprint(w, "\n\n<style>\n  .cal {\n      gap: 0.1rem;\n      display: grid;\n      grid-template-columns: repeat(7, 1fr);\n      width: 250px;\n      background: var(--code-bg);\n  }\n  .cal-item:hover,\n  .cal-item.selected {\n      background: var(--fg);\n      color: var(--bg);\n  }\n  .done span {\n      text-decoration: line-through;\n      color: var(--small-fg);\n  }\n</style>\n\n<div>\n  <input id=\"year-month\" type=\"month\">\n  <div id=\"cal\" class=\"cal\"></div>\n</div>\n\n<hr>\n\n<form id=\"form\">\n  <input id=\"todo-input\">\n  <button type=\"submit\">추가</button>\n</form>\n<span id=\"msg\"></span>\n\n<br>\n\n")
  renderTodos := func(todos []TodoDto, delBtn bool) { 
 fmt.Fprint(w, "\n<ol>\n  ")
  for _, t := range todos { 
@@ -94,7 +94,7 @@ fmt.Fprint(w, "/todos/${id}`,{\n        method:\"PATCH\",\n        headers: { \"
 fmt.Fprint(w, "/todos/${id}`,{\n        method:\"DELETE\",\n    }).then(async (res)=>{\n        if (res.ok) {\n            location.reload();\n        } else {\n            const msg = await res.text();\n            alert(msg);\n        }\n    });\n}\n")
 fmt.Fprint(w, "\n</script>\n\n")
  } else { 
-fmt.Fprint(w, "\n\n<img src=\"static/우는아기.png\">\n로그인해주세요\n\n")
+fmt.Fprint(w, "\n\n로그인해주세요\n\n")
  } 
 fmt.Fprint(w, "\n\n")
 fmt.Fprint(w, "  </body>\n</html>\n")

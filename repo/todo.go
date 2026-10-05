@@ -38,12 +38,16 @@ func (t Todo) Validate() error {
     if len(t.Content) >= 64 {
         return errors.New("content too long")
     }
-    if t.Month < 1 || t.Month > 12 {
-        return errors.New("invalid month")
-    }
-    if t.Day < 1 || t.Day > 31 {
-        return errors.New("invalid day")
-    }
+	if t.Month > 12 || t.Month < 1 {
+		return errors.New("invalid month")
+	}
+	max_days := []int8{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
+	if (t.Year%4 == 0 && t.Year%100 != 0) || (t.Year%400 == 0) {
+		max_days[1] = 29
+	}
+	if t.Day < 1 || t.Day > max_days[t.Month-1] {
+		return errors.New("invalid day")
+	}
     return nil
 }
 
@@ -86,15 +90,8 @@ func NewTodoCollection() (*TodoCollection, error) {
 }
 
 func (tc *TodoCollection) Create(t Todo) (int64, error) {
-	if t.Month > 12 || t.Month < 1 {
-		return 0, errors.New("invalid month")
-	}
-	max_days := []int8{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-	if (t.Year%4 == 0 && t.Year%100 != 0) || (t.Year%400 == 0) {
-		max_days[1] = 29
-	}
-	if t.Day < 1 || t.Day > max_days[t.Month-1] {
-		return 0, errors.New("invalid day")
+	if err := t.Validate(); err != nil {
+		return 0, err
 	}
 	return tc.OnJson.Create(t)
 }

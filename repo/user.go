@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"sort"
 	"time"
 	"errors"
 	"sync"
@@ -50,10 +51,10 @@ func (uc *UserCollection) Create(u User) (int64, error) {
 func (uc *UserCollection) List() ([]User, error) {
 	users, err := uc.OnJson.List()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	sort.Slice(users, func(i, j int) bool {
-		return todos[i].Id < todos[j].Id
+		return users[i].Id < users[j].Id
 	})
 	return users, nil
 }
