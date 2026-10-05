@@ -1,0 +1,10 @@
+<p>
+  <? for _, p := range Pages {?>
+    <? if page.Link == p.Link { ?>
+      <a href=<? fmt.Fprint(w, p.Link) ?> class="highlight"><? fmt.Fprint(w, p.Text) ?></a>
+    <? } else {?>
+      <a href=<? fmt.Fprint(w, p.Link) ?>><? fmt.Fprint(w, p.Text) ?></a>
+    <? } ?>
+  <? } ?>
+  <a href="/logout">logout</a>
+</p>

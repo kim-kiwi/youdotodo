@@ -1,0 +1,64 @@
+:root {
+    --fg: #e4e4ef;
+    --bg: #181818;
+    --code-bg: #181818;
+    --small-fg: #d4d4df;
+}
+
+@font-face {
+  font-family: 'Iosevka';
+  src: url('font.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  /* font-display: swap; */
+}
+
+body {
+	max-width: 800px;
+	margin: 3rem auto;
+    font-family: "Iosevka";
+    color: var(--fg);
+    background: var(--bg);
+}
+
+a {
+	color: var(--fg);
+}
+a:hover {
+	color: var(--bg);
+	background-color: var(--fg);
+}
+
+ul, ol {
+	margin: 0;
+	padding: 0 1.5rem;
+}
+
+ul {
+	list-style-type: square;
+}
+
+pre, code {
+	padding: 0.1rem 0.25rem;
+	background-color: var(--code-bg);
+	border-radius: 0.25rem;
+	font-family: Consolas, monospace;
+	font-weight: normal;
+	color: var(--fg);
+}
+
+pre code {
+	padding: 0;
+	background: none;
+}
+
+.small {
+	color: var(--small-bg);
+	font-size: 1rem;
+	font-weight: normal;
+}
+
+.highlight {
+    color: var(--bg);
+    background: var(--fg);
+}

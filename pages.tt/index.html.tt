@@ -1,0 +1,103 @@
+<%echo-off%>
+
+<?
+package pages
+
+import (
+  "fmt"
+  "net/http"
+  . "youdotodo/repo"
+)
+?>
+
+<? func Index(w http.ResponseWriter, r *http.Request, logged_in bool, my_uid int64, todosByUser map[int64][]TodoDto) { ?>
+<? page := Pages[0] ?>
+<? echo := Echo(w) ?>
+<%echo-on%>
+<%include pages.tt/header.html.tt%>
+<%include pages.tt/nav.html.tt%>
+
+<? if logged_in { ?>
+
+<!-- <img src="static/웃는아기.png"> -->
+<!-- 어서오세요 -->
+
+<style>
+  .cal {
+      gap: 0.1rem;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      width: 250px;
+      background: var(--code-bg);
+  }
+  .cal-item:hover,
+  .cal-item.selected {
+      background: var(--fg);
+      color: var(--bg);
+  }
+  .done span {
+      text-decoration: line-through;
+      color: var(--small-fg);
+  }
+</style>
+
+<div>
+  <input id="year-month" type="month">
+  <div id="cal" class="cal"></div>
+</div>
+
+<hr>
+
+<form id="form">
+  <input id="todo-input">
+  <button type="submit">추가</button>
+</form>
+<span id="msg"></span>
+
+<br>
+
+<? renderTodos := func(todos []TodoDto, delBtn bool) { ?>
+<ol>
+  <? for _, t := range todos { ?>
+    <li>
+      <div style="display:flex;" <? if t.Done { ?>class="done"<? } ?>>
+        <input type="checkbox" oninput="doneTodo(<? echo(t.Id) ?>, this.checked)" <? if t.Done { ?>checked<? } ?> <? if !delBtn { ?>disabled<? } ?>>
+        <span><? echo(t.Content) ?></span>
+        <? if delBtn { ?>
+          <button style="margin-left:auto;" onclick="deleteTodo(<? echo(t.Id) ?>)">X</button>
+        <? } ?>
+      </div>
+    </li>
+  <? } ?>
+</ol>
+<? } ?>
+
+<ol>
+  <fieldset>
+    <legend>You</legend>
+    <? renderTodos(todosByUser[my_uid], true) ?>
+  </fieldset>
+  <? for uid, todos := range todosByUser { ?>
+    <? if uid != my_uid { ?>
+      <fieldset>
+        <legend><? echo(todos[0].UserName) ?></legend>
+        <? renderTodos(todos, false) ?>
+      </fieldset>
+    <? } ?>
+  <? } ?>
+</ol>
+
+<script>
+<%include pages.tt/index.js.tt%>
+</script>
+
+<? } else { ?>
+
+<img src="static/우는아기.png">
+로그인해주세요
+
+<? } ?>
+
+<%include pages.tt/footer.html.tt%>
+<%echo-off%>
+<? } ?>

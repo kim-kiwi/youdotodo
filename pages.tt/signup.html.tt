@@ -1,0 +1,50 @@
+<%echo-off%>
+
+<?
+package pages
+
+import (
+  "fmt"
+  "net/http"
+)
+?>
+
+<? func SignUp(w http.ResponseWriter, r *http.Request) { ?>
+<? page := Pages[1] ?>
+<? echo := Echo(w) ?>
+<%echo-on%>
+<%include pages.tt/header.html.tt%>
+<%include pages.tt/nav.html.tt%>
+
+<form>
+  <input>
+  <button type="submit">signup</button>
+</form>
+
+<span></span>
+
+<script>
+  const form = document.querySelector("form");
+  const input = document.querySelector("input");
+  const span = document.querySelector("span");
+  form.onsubmit = (e) => {
+      e.preventDefault();
+      fetch("<? echo(api) ?>/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({name: input.value}),
+      }).then(async (res)=>{
+          if (res.ok) {
+              span.textContent = "successfully signed up. please log in.";
+          } else {
+              span.textContent = await res.text();
+          }
+      }).catch(_=>{
+          span.textContent = "something went wrong.";
+      });
+  }
+</script>
+
+<%include pages.tt/footer.html.tt%>
+<%echo-off%>
+<? } ?>

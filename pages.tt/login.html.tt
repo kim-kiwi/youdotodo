@@ -1,0 +1,51 @@
+<%echo-off%>
+
+<?
+package pages
+
+import (
+  "fmt"
+  "net/http"
+)
+?>
+
+<? func Login(w http.ResponseWriter, r *http.Request) { ?>
+<? page := Pages[2] ?>
+<? echo := Echo(w) ?>
+<%echo-on%>
+<%include pages.tt/header.html.tt%>
+<%include pages.tt/nav.html.tt%>
+
+<form>
+  <input>
+  <br>
+  <label>
+    <input type="checkbox" required>이 계정이 제 계정입니다.
+  </label>
+  <br>
+  <button type="submit">login</button>
+</form>
+
+<span id="span"></span>
+
+<script>
+  const form = document.querySelector("form");
+  const input = document.querySelector("input");
+  const span = document.querySelector("#span");
+  form.onsubmit = (e) => {
+      e.preventDefault();
+      fetch("<? echo(api) ?>/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({name: input.value}),
+      }).then(res=>res.json()).then(data=>{
+          span.textContent = data.msg;
+      }).catch(_=>{
+          span.textContent = "something went wrong.";
+      });
+  }
+</script>
+
+<%include pages.tt/footer.html.tt%>
+<%echo-off%>
+<? } ?>

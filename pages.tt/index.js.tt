@@ -1,0 +1,100 @@
+const cal = document.querySelector("#cal");
+const week = ["일","월","화","수","목","금","토"];
+
+function get_max_day(year, month) {
+    return new Date(year, month, 0).getDate();
+}
+function render_cal(year, month, day) {
+    cal.innerHTML = "";
+    for (const w of week) {
+        const div = document.createElement("div");
+        div.style.fontWeight = "bold";
+        div.textContent = w;
+        cal.append(div);
+    }
+    const max_day = get_max_day(year, month);
+    const date = new Date(year,month-1,1);
+    const day_number = date.getDay();
+    for (let i = 0; i < day_number; ++i) {
+        const div = document.createElement("div");
+        div.textContent = "";
+        cal.append(div);
+    }
+    for (let i = 1; i <= max_day; ++i) {
+        const div = document.createElement("div");
+        div.classList.add("cal-item");
+        if (i==day) div.classList.add("selected");
+        div.addEventListener("click", () => {
+            location.href=`?year=${year}&month=${month}&day=${i}`;
+        });
+        div.textContent = i;
+        cal.append(div);
+    }
+}
+
+const today = new Date();
+const params = new URLSearchParams(window.location.search);
+const year = parseInt(params.get("year"), 10);
+const month = parseInt(params.get("month"), 10);
+const day = parseInt(params.get("day"), 10);
+
+const year_month = document.querySelector("#year-month");
+year_month.addEventListener("input", (e)=>{
+    const [year, month] = year_month.value.split("-");
+    location.href = `?year=${year}&month=${month}&day=1`;
+});
+
+year_month.value = `${year}-${String(month).padStart(2,'0')}`;
+render_cal(year,month,day);
+
+const form = document.querySelector("#form");
+const input = document.querySelector("#todo-input");
+input.focus();
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    addTodo(input.value, year, month, day);
+});
+
+const span = document.querySelector("#msg");
+const nextIdx = <? echo(len(todosByUser[my_uid])) ?>;
+function addTodo(content, year, month, day) {
+    fetch("<? echo(api) ?>/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({content,year,month,day,idx:nextIdx}),
+    }).then(async res=>{
+        if (res.ok) {
+            location.reload();
+        } else {
+            span.textContent = await res.text();
+        }
+    });
+}
+
+function doneTodo(id,done) {
+    fetch(`<? echo(api) ?>/todos/${id}`,{
+        method:"PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({done}),
+    }).then(async (res)=>{
+        if (res.ok) {
+            location.reload();
+        } else {
+            const msg = await res.text();
+            alert(msg);
+        }
+    });
+}
+
+function deleteTodo(id) {
+    fetch(`<? echo(api) ?>/todos/${id}`,{
+        method:"DELETE",
+    }).then(async (res)=>{
+        if (res.ok) {
+            location.reload();
+        } else {
+            const msg = await res.text();
+            alert(msg);
+        }
+    });
+}
