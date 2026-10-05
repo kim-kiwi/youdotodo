@@ -19,9 +19,6 @@ import (
 
 <? if logged_in { ?>
 
-<!-- <img src="static/웃는아기.png"> -->
-<!-- 어서오세요 -->
-
 <style>
   .cal {
       gap: 0.1rem;
@@ -93,7 +90,6 @@ import (
 
 <? } else { ?>
 
-<img src="static/우는아기.png">
 로그인해주세요
 
 <? } ?>
